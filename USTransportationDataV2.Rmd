@@ -1,0 +1,63 @@
+---
+title: "US Historical Transportation Data"
+author: "Jacob Margolis"
+date: "9/25/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Packages
+
+```{r}
+#install.packages("read_xls")
+#install.packages("ggplot2")
+library(base)
+library(stats)
+library(readr)
+library(ggplot2)
+library(dplyr)
+#library(lubridate)
+```
+
+```{r}
+# setwd("D:/R Project/US Intercity Transportation Methods Dashboard")
+setwd(file.path("D:", "R Project", "US Intercity Transportation Dashboard"))
+```
+
+## Import Data
+
+* US Rail Passengers 2000-2020
+```{r}
+  
+  SeasonalData_Rail_2000 <- read_csv("D:/R Project/US Intercity Transportation Dashboard/TransData.csv", 
+  + col_types = cols(OBS_DATE = col_character()))
+  #mutate(OBS_DATE = as.Date(OBS_DATE))  %>%
+  #mutate(OBS_DATE = ymd(OBS_DATE))  # Using ymd from lubridate seems to be putting data into the correct format.
+View(SeasonalData_Rail_2000)
+
+```
+  
+    + Notes
+      - OBS_DATE = Observation Date		
+      - RAIL_PM = Rail passenger miles		
+      - RAIL_PM_D11 = Seasonally-adjusted rail passenger miles		
+  
+    + Data Source
+      - Rail passenger miles - U.S. Department of Transportation Federal Railroad Administration available at: http://safetydata.fra.dot.gov/OfficeofSafety/ 
+      - Seasonally-adjusted rail passenger miles - U.S. Department of Transportation of Transportation Statistics (BTS) calculation from data collected by U.S. Department of Transportation, Federal Railroad Administration available at: http://safetydata.fra.dot.gov/OfficeofSafety/
+
+
+ 
+##Graph
+
+```{r}
+chart <- ggplot(SeasonalData_Rail_2000, aes(x=OBS_DATE, y=RAIL_PM)) +
+  geom_line() +
+  labs(x = "Date", y = "Passengers") #+
+ # scale_x_date(limits = c("01-01-2020", "04-01-2020"), date_breaks = "3 year") # it's unclear why scale_x_date is not working.  
+chart
+
+```
